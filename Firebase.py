@@ -28,16 +28,10 @@ file_path = '/home/pi/PBL4/buglarly.jpg'
 storage = app.storage()
 storage.child('buglarly.jpg').put(file_path)
 print('Send image successfully')
-body = "http://meet.jit.si/"+str(chat_id)
+link = "http://meet.jit.si/"+str(chat_id)
 
-while True:
-  data = {
-  "AlertTime": body,
-    
-  }
-
-  db.child("Status").set(data)
-
-  # Add a 5-second delay between pushes
-  time.sleep(1)
-  print(data)
+data = {"Link_Jitsi_Meet": link}
+db.child("Status").set(data)
+# Add a 5-second delay between pushes
+time.sleep(1)
+print(data)
