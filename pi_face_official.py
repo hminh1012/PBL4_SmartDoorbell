@@ -199,6 +199,7 @@ while True:
 		cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 		if face_frames <= 0.5:
 		    pixels.wakeup()
+		    cam.capture_file("buglarly.jpg")
 		    #os.system('aplay first_time.wav') # phat' am^ thanh chao` quy' khach'
 		    wav_path = "first_time.wav"
 		    t = Thread(target=play_sound, args=(wav_path,)) # Tien hanh phat am thanh trong 1 luong rieng
@@ -220,7 +221,7 @@ while True:
 					#t.deamon = True
 					#t.start
 					#time.sleep(2.5)
-					os.system('python testFirebase_image.py')
+					os.system('python testCloud_image.py')
 					
 					
 					
