@@ -8,29 +8,6 @@ import datetime
 thoigian = datetime.datetime.now()
 
 
-
-# Configure Cloudinary using environment variables
-cloudinary.config(
-    cloud_name="dyrabqcno",
-    secure = True,
-    api_key="885437657119333",
-    api_secret="JrlYz1bz-cKtqwtLJ7RYxetVLmU"
-)
-
-# Upload the image
-response = cloudinary.uploader.upload(
-    "example.jpg",  # Path to your image
-    public_id = names.get_full_name(),        # Optional: specify a unique ID for the file
-    overwrite=True            # Optional: overwrite if the same public ID exists
-)
-
-# Print the response
-print("Uploaded Successfully!")
-print(f"URL: {response['secure_url']}")
-
-
-
-
 # Configure Cloudinary using environment variables
 cloudinary.config(
     cloud_name="dyrabqcno",
