@@ -5,6 +5,33 @@ import signal
 import time
 import uuid
 import firebase
+import cloudinary
+import cloudinary.uploader
+import names
+import datetime
+
+thoigian = datetime.datetime.now()
+
+
+
+# Configure Cloudinary using environment variables
+cloudinary.config(
+    cloud_name="dyrabqcno",
+    secure = True,
+    api_key="885437657119333",
+    api_secret="JrlYz1bz-cKtqwtLJ7RYxetVLmU"
+)
+
+# Upload the image
+response = cloudinary.uploader.upload(
+    "buglarly.jpg",  # Path to your image
+    public_id=names.get_full_name(),        # Optional: specify a unique ID for the file
+    overwrite=True            # Optional: overwrite if the same public ID exists
+)
+
+# Print the response
+print("Uploaded Successfully!")
+print(f"URL: {response['secure_url']}")
 
 call_face = False
 chat_id = str(uuid.uuid4())
@@ -29,15 +56,14 @@ db = app.database()
 # File to store in storage
 file_path = '/home/pi/PBL4/buglarly.jpg'
 
-storage = app.storage()
-storage.child('buglarly.jpg').put(file_path)
-print('Send image successfully')
-link = "http://meet.jit.si/"+str(chat_id)
 
-data = {"Link_Jitsi_Meet": link}
+link = "http://meet.jit.si/"+str(chat_id)
+data = {"Link_Jitsi_Meet": link,
+"Link_image": response['secure_url'],
+"Time": thoigian.strftime("%c")}
 db.child("Status").set(data)
 # Add a 5-second delay between pushes
-time.sleep(1)
+time.sleep(0.1)
 print(data)
 
 
