@@ -14,11 +14,12 @@ from threading import Thread
 import subprocess
 import signal
 
-BUTTON = 17
-
+#Set up User Button, connected to GPIO17
+BUTTON = 17 #GPIO17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON, GPIO.IN)
 
+#Set up thu vien cho den RGB LED: 3 APA102 RGB LEDs, connected to SPI interface
 try:
     import queue as Queue
 except ImportError:
@@ -104,7 +105,6 @@ class Pixels:
             t /= 2
 
         # time.sleep(0.5)
-
         self.colors = colors
 
     def _speak(self):
@@ -143,7 +143,7 @@ class Pixels:
 def play_sound(path):
 	os.system('aplay ' + path)
 	
-# Set up cai tham so
+# Set up cai tham so de? dieu khien den` LED
 pixels = Pixels()
 pixels_status = True
 alarmed_think = False
@@ -154,16 +154,16 @@ alarmed_wakeup = False
 # Khoi tao cac module detect mat 
 face_detect = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
-# Threshold so frame lien tuc co nguoi 
-max_face_frames = 200
-max_noface_frames = 300
-
-# First time
-first_time = True
-
 # Dem so frame co mat nguoi
 face_frames = 0
 noface_frames = 0
+
+# Threshold so frame lien tuc co nguoi va khong co nguoi, fps xap xi la 20
+max_face_frames = 200 #cu' 10s lien tuc co' mat. nguoi` se~ phat' alarm
+max_noface_frames = 300 #cu' 15s lien tuc khong co mat nguoi se~ reset tat ca tham so 
+
+# First time
+first_time = True
 
 # Check xem da canh bao hay chua
 alarmed = False
@@ -196,7 +196,9 @@ while True:
 	# Duyet qua cac mat
 	for (x, y, w, h) in faces:
 		first_time = False
-		cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+		cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2) #ve~ label tren mat.
+		
+		#Phat' hien. mat. lan` dau`
 		if face_frames <= 0.5:
 		    pixels.wakeup()
 		    cam.capture_file("buglarly.jpg")
@@ -221,14 +223,9 @@ while True:
 					#t.deamon = True
 					#t.start
 					#time.sleep(2.5)
-					os.system('python testCloud_image.py')
-					
-					
-					
-					
-					
-					
-								
+					os.system('python testCloud_image.py') #gui? anh? len cloud
+											    
+	#Neu' khong phai? lan` dau` va` da~ tat' den` thi` bat. den`, neu khong thi` tat' den`
 	if not first_time:		
 	    if not alarmed_wakeup:
 		    alarmed_wakeup = True
@@ -237,6 +234,7 @@ while True:
 	else:
 	    pixels.off()
 	
+	#Hien. chu~ tren man` hinh`
 	cv2.putText(frame, "Face Detected: {:.3f}".format(face_frames/30), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 	cv2.putText(frame, "No Face Detected: {:.3f}".format(noface_frames/30), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2, cv2.LINE_AA,)
 	noface_frames += 1
@@ -248,11 +246,11 @@ while True:
 		alarmed_think = False
 		alarmed_wakeup = False
 
-
+	#Khi khach' hang` nhan' nut' se~ bat. chuong va` thoat' khoi? vong` lap.
 	state = GPIO.input(BUTTON)
 	if not state:# Button pressed
 	    print("button on")
-	    os.system('aplay ring_bell.wav')
+	    os.system('aplay ring_bell.wav') #bat chuong
 	    #wav_path = "please_wait.wav"
 	    #t = Thread(target=play_sound, args=(wav_path,)) # Tien hanh phat am thanh trong 1 luong rieng
 	    #t.deamon = True
@@ -260,9 +258,7 @@ while True:
 	    pixels.off()
 	    time.sleep(0.1)  # Small delay to debounce button
 	    call_jitsi = True
-	    break
- 
-		
+	    break	
 		
 	# Hien thi len man hinh
 	cv2.imshow("Camera", frame)
@@ -273,8 +269,10 @@ while True:
 	    pixels.off()
 	    break
 	    
+#Reset camera     
 cv2.destroyAllWindows()
 cam.stop()
+#Chuyen sang chay file doorbell_official.py de goi cho chu? nha`
 if call_jitsi == True:
     subprocess.Popen(["python", "doorbell_official.py"])
     pid = os.getpid()
