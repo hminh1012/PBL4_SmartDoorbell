@@ -10,11 +10,13 @@ import cloudinary.uploader
 import names
 import datetime
 
-thoigian = datetime.datetime.now()
+chat_id = str(uuid.uuid4()) #tao. ID room ngau nhien
+link = "http://meet.jit.si/"+str(chat_id)
+thoigian = datetime.datetime.now() #ghi lai. thoi` diem? hien. tai.
+call_face = False
 
 
-
-# Configure Cloudinary using environment variables
+# Configure Cloudinary 
 cloudinary.config(
     cloud_name="dyrabqcno",
     secure = True,
@@ -33,8 +35,6 @@ response = cloudinary.uploader.upload(
 print("Uploaded Successfully!")
 print(f"URL: {response['secure_url']}")
 
-call_face = False
-chat_id = str(uuid.uuid4())
 
 # Firebase configuration
 config = {
@@ -50,28 +50,24 @@ config = {
 
 # Instantiates a Firebase app
 app = firebase.initialize_app(config)
-
 db = app.database()
 
-# File to store in storage
-file_path = '/home/pi/PBL4/buglarly.jpg'
-
-
-link = "http://meet.jit.si/"+str(chat_id)
+# Gui? Link Jitsi room, link hinh` anh?, thoi` gian len Firebase
 data = {"Link_Jitsi_Meet": link,
 "Link_image": response['secure_url'],
 "Time": thoigian.strftime("%c")}
 db.child("Status").set(data)
-# Add a 5-second delay between pushes
+# Add a 0.1-second delay between pushes
 time.sleep(0.1)
 print(data)
 
-
+#set up button
 BUTTON = 17
 DEBOUNCE_TIME = 0.2  # Debounce time in seconds
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Pull-up to handle button state reliably
 
+# Set up lop' cuoc. goi.
 class VideoChat:
     def __init__(self, chat_id):
         self.chat_id = chat_id
@@ -92,12 +88,13 @@ class VideoChat:
             os.kill(self._process.pid, signal.SIGTERM)
             self._process = None
             print("Video chat ended.")
-
+# Set up ham` chinh' cua? chuong trinh`
 def jitsi():
     video_chat = VideoChat(chat_id)
     print("Ready for button press.")
-    video_chat.start()
-
+    video_chat.start() #mo? cuoc. goi.
+    
+    #Nhan' nut' se~ out room Jitsi
     try:
         while True:
             state = GPIO.input(BUTTON)
@@ -127,5 +124,11 @@ def jitsi():
 
 if __name__ == "__main__":
     jitsi()
+    
+    #quay lai. chay. file pi_face_official.py
+    subprocess.Popen(["python", "pi_face_official.py"])
+    pid = os.getpid()
+    call_jitsi = False
+    os.kill(pid, signal.SIGTERM)
 
         
