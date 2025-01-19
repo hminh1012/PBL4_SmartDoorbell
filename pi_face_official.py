@@ -152,15 +152,16 @@ alarmed_wakeup = False
 
 
 # Khoi tao cac module detect mat 
-face_detect = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+face_detect = cv2.CascadeClassifier("/home/pi/PBL4/haarcascade_frontalface_default.xml")
+
 
 # Dem so frame co mat nguoi
 face_frames = 0
 noface_frames = 0
 
 # Threshold so frame lien tuc co nguoi va khong co nguoi, fps xap xi la 20
-max_face_frames = 200 #cu' 10s lien tuc co' mat. nguoi` se~ phat' alarm
-max_noface_frames = 300 #cu' 15s lien tuc khong co mat nguoi se~ reset tat ca tham so 
+max_face_frames = 150 #cu' 10s lien tuc co' mat. nguoi` se~ phat' alarm
+max_noface_frames = 200 #cu' 15s lien tuc khong co mat nguoi se~ reset tat ca tham so 
 
 # First time
 first_time = True
@@ -201,9 +202,9 @@ while True:
 		#Phat' hien. mat. lan` dau`
 		if face_frames <= 0.5:
 		    pixels.wakeup()
-		    cam.capture_file("buglarly.jpg")
+		    cam.capture_file("/home/pi/PBL4/buglarly.jpg")
 		    #os.system('aplay first_time.wav') # phat' am^ thanh chao` quy' khach'
-		    wav_path = "first_time.wav"
+		    wav_path = "/home/pi/PBL4/first_time.wav"
 		    t = Thread(target=play_sound, args=(wav_path,)) # Tien hanh phat am thanh trong 1 luong rieng
 		    t.deamon = True
 		    t.start()
@@ -216,14 +217,15 @@ while True:
 					alarmed_think = True
 					alarmed_wakeup = False
 					pixels.speak() # nhay' den`
-					cam.capture_file("buglarly.jpg")
-					os.system('aplay alarm.wav')	# phat am thanh canh bao
+					cam.capture_file("/home/pi/PBL4/buglarly.jpg")
+					os.system('python /home/pi/PBL4/testCloud_image.py') #gui? anh? len cloud
+					os.system('aplay /home/pi/PBL4/alarm.wav')	# phat am thanh canh bao
 					#wav_path = "alarm.wav"
 					#t = Thread(target=play_sound, args=(wav_path,)) # Tien hanh phat am thanh trong 1 luong rieng
 					#t.deamon = True
 					#t.start
 					#time.sleep(2.5)
-					os.system('python testCloud_image.py') #gui? anh? len cloud
+					
 											    
 	#Neu' khong phai? lan` dau` va` da~ tat' den` thi` bat. den`, neu khong thi` tat' den`
 	if not first_time:		
@@ -239,7 +241,7 @@ while True:
 	cv2.putText(frame, "No Face Detected: {:.3f}".format(noface_frames/30), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2, cv2.LINE_AA,)
 	noface_frames += 1
 	
-	if noface_frames >= max_noface_frames: # Sau khoang? thoi` gian max_noface_frames thi` reset het' chi? so' ve` mac dinh
+	if noface_frames >= max_noface_frames or face_frames >= 300: # Sau khoang? thoi` gian max_noface_frames thi` reset het' chi? so' ve` mac dinh
 		face_frames = 0
 		alarmed = False
 		first_time = True
@@ -249,13 +251,13 @@ while True:
 	#Khi khach' hang` nhan' nut' se~ bat. chuong va` thoat' khoi? vong` lap.
 	state = GPIO.input(BUTTON)
 	if not state:# Button pressed
+	    pixels.off()
 	    print("button on")
-	    os.system('aplay ring_bell.wav') #bat chuong
+	    os.system('aplay /home/pi/PBL4/ring_bell.wav') #bat chuong
 	    #wav_path = "please_wait.wav"
 	    #t = Thread(target=play_sound, args=(wav_path,)) # Tien hanh phat am thanh trong 1 luong rieng
 	    #t.deamon = True
-	    #t.start
-	    pixels.off()
+	    #t.start	    
 	    time.sleep(0.1)  # Small delay to debounce button
 	    call_jitsi = True
 	    break	
@@ -274,7 +276,7 @@ cv2.destroyAllWindows()
 cam.stop()
 #Chuyen sang chay file doorbell_official.py de goi cho chu? nha`
 if call_jitsi == True:
-    subprocess.Popen(["python", "doorbell_official.py"])
+    subprocess.Popen(["python", "/home/pi/PBL4/doorbell_official.py"])
     pid = os.getpid()
     call_jitsi = False
     os.kill(pid, signal.SIGTERM)
