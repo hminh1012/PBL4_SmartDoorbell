@@ -9,7 +9,7 @@ Link youtube (new version) https://youtube.com/shorts/BH15ADZUEco?si=b3THPnh-ZV1
 # Smart Doorbell Project
 
 ## Overview
-This project focuses on the design and implementation of a **Smart Doorbell** system based on facial detection and Internet of Things (IoT) technologies. The system integrates face detection using Haar Cascade, cloud storage, real-time notifications, and a mobile application for remote monitoring and interaction. The project was developed by Nguyen Thi Tam and Tran Hoang Minh as part of a final exam at The University of Science and Technology.
+This project focuses on the design and implementation of a **Smart Doorbell** system based on facial detection and Internet of Things (IoT) technologies. The system integrates face detection using Haar Cascade, cloud storage, real-time notifications, and a mobile application for remote monitoring and interaction. The project was developed by BMQT as part of a final exam, and L6B7 as a Competittion at The University of Science and Technology.
 
 ## Table of Contents
 - [Project Description](#project-description)
