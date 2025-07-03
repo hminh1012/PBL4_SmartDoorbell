@@ -11,6 +11,10 @@ Link youtube (new version) https://youtube.com/shorts/BH15ADZUEco?si=b3THPnh-ZV1
 ## Overview
 This project focuses on the design and implementation of a **Smart Doorbell** system based on facial detection and Internet of Things (IoT) technologies. The system integrates face detection using Haar Cascade, cloud storage, real-time notifications, and a mobile application for remote monitoring and interaction. The project was developed by BMQT as part of a final exam, and L6B7 as a Competittion at The University of Science and Technology.
 
+Here a quickly demo of our product 
+![Demo1](https://github.com/hminh1012/PBL4_SmartDoorbell/blob/9fe619930a8e170d04409bb992d84d94730c5136/img/demo1.gif)
+
+
 ## Table of Contents
 - [Project Description](#project-description)
 - [System Design](#system-design)
@@ -33,8 +37,11 @@ The system is built around a **Raspberry Pi 5** board, integrated with:
 - **Raspberry Pi Camera V2** for capturing high-definition images and videos.
 - **ReSpeaker 2-Mics Pi HAT** for two-way audio communication.
 - **Stereo speaker** and **2W USB-C Power Supply** for operation.
+- **TFT LCD 3.5** to display on system
 - The system connects to cloud services (Cloudinary and Firebase) for secure storage and remote access.
 - When a visitor presses the doorbell, the system initiates a real-time video call and can trigger an alarm for unknown visitors.
+
+![wiringdiagram](https://github.com/hminh1012/PBL4_SmartDoorbell/blob/9fe619930a8e170d04409bb992d84d94730c5136/img/wiringdiagram.png)
 
 Key features:
 - **Face Detection**: Utilizes Haar Cascade for real-time face recognition.
@@ -70,11 +77,9 @@ The Smart Doorbell system achieved high accuracy in face detection under control
 ## Repository Structure (on-going)
 ```
 Smart-Doorbell/
-├── src/
-│   ├── face_detection.py         # Python script for Haar Cascade face detection
-│   ├── cloud_integration.py     # Script for Cloudinary and Firebase integration
-│   ├── video_call.py            # Script for real-time video call functionality
-│   ├── audio_stream.py          # Script for two-way audio communication
+├── pi_face_official.py         # Python script for Haar Cascade face detection
+├── doorbell_official.py        # Script for Cloudinary and Firebase integration connect with Jitsi Meet
+
 ├── docs/
 │   ├── Final_Exam_Report.pdf    # Project documentation
 ├── README.md                    # Project overview and instructions
@@ -98,7 +103,7 @@ Smart-Doorbell/
 ## Installation (on-going)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/Smart-Doorbell.git
+   git clone https://github.com/hminh1012/PBL4_SmartDoorbell.git
    ```
 2. Set up the Raspberry Pi 5 with the required hardware components.
 3. Install dependencies:
@@ -112,14 +117,12 @@ Smart-Doorbell/
 1. Power on the Raspberry Pi and ensure all hardware components are connected.
 2. Run the face detection script:
    ```bash
-   python src/face_detection.py
+   python pi_face_official.py
    ```
-3. Test cloud integration and notifications:
-   ```bash
-   python src/cloud_integration.py
-   ```
-4. Launch the mobile application and press the "Call Video" button to test real-time video and audio functionality.
-5. Access stored images and videos via the mobile app or cloud platform.
+
+
+## Result (on-going)
+![Result1](https://github.com/hminh1012/PBL4_SmartDoorbell/blob/9fe619930a8e170d04409bb992d84d94730c5136/img/demo2.gif)
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue to discuss improvements or bug fixes.
